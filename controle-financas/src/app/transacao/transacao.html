@@ -1,0 +1,46 @@
+<p-card header="Controle de Finanças">
+  <div class="p-d-flex p-jc-end p-mb-3">
+    <p-button label="Nova Transação" (click)="showNewTransactionDialog()" icon="pi pi-plus"></p-button>
+  </div>
+  <p-table [value]="transacoes">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transacao>
+      <tr>
+        <td>{{ transacao.descricao }}</td>
+        <td>{{ transacao.valor | currency:'BRL' }}</td>
+        <td><p-tag [severity]="transacao.concluida ? 'success' : 'danger'" [value]="transacao.concluida ? 'Concluída' : 'Pendente'"></p-tag></td>
+        <td>
+          <p-button icon="pi pi-pencil" (click)="editTransaction(transacao)"></p-button>
+          <p-button icon="pi pi-trash" (click)="deleteTransaction(transacao.id)" class="p-ml-2" severity="danger"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+
+<p-dialog header="Detalhes da Transação" [(visible)]="displayDialog" [modal]="true">
+  <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12">
+      <label for="descricao">Descrição</label>
+      <p-inputText id="descricao" [(ngModel)]="transacaoSelecionada.descricao"></p-inputText>
+    </div>
+    <div class="p-field p-col-12">
+      <label for="valor">Valor</label>
+      <p-inputNumber id="valor" [(ngModel)]="transacaoSelecionada.valor" mode="currency" currency="BRL"></p-inputNumber>
+    </div>
+    <div class="p-field p-col-12">
+      <label for="concluida">Concluída?</label>
+      <p-toggleButton [(ngModel)]="transacaoSelecionada.concluida" onLabel="Sim" offLabel="Não"></p-toggleButton>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Salvar" (click)="saveTransaction()"></p-button>
+  </ng-template>
+</p-dialog>
