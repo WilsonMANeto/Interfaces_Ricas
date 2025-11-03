@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "controle-financas": {
+    "contole-financas": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "controle-financas:build:production"
+              "buildTarget": "contole-financas:build:production"
             },
             "development": {
-              "buildTarget": "controle-financas:build:development"
+              "buildTarget": "contole-financas:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,8 +82,6 @@
               }
             ],
             "styles": [
-              "node_modules/@primeuix/themes/aura/aura-blue/theme.css",
-              "node_modules/primeicons/primeicons.css",
               "src/styles.css"
             ]
           }
