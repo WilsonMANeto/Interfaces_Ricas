@@ -1,0 +1,54 @@
+<p-dialog 
+  header="{{ transacaoForm.id ? 'Editar Transação' : 'Nova Transação' }}" 
+  [(visible)]="visible"
+  (onHide)="cancelar()"
+  [modal]="true" 
+  [style]="{ width: '450px' }">
+  
+  <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-2">
+      <label for="descricao" class="text-gray-700">Descrição</label>
+      <input 
+        pInputText 
+        id="descricao" 
+        [(ngModel)]="transacaoForm.descricao" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="valor" class="text-gray-700">Valor</label>
+      <p-inputNumber 
+        inputId="valor" 
+        [(ngModel)]="transacaoForm.valor"
+        mode="currency" 
+        currency="BRL" 
+        locale="pt-BR">
+      </p-inputNumber>
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <p-checkbox 
+        [(ngModel)]="transacaoForm.ehReceita" 
+        [binary]="true" 
+        inputId="ehReceita">
+      </p-checkbox>
+      <label for="ehReceita" class="text-gray-600">
+        É uma receita?
+      </label>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      styleClass="p-button-text"
+      (click)="cancelar()">
+    </p-button>
+
+    <p-button 
+      label="Salvar" 
+      icon="pi pi-check" 
+      (click)="salvar()">
+    </p-button>
+  </ng-template>
+</p-dialog>

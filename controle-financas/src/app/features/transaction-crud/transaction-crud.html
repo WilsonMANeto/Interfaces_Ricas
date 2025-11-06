@@ -1,119 +1,15 @@
 <p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>
 
-<p-card header="Gerenciador de Transações">
+<app-transaction-list
+  [transacoes]="transacoes"
+  (onNew)="abrirModalNovo()"
+  (onEdit)="abrirModalEditar($event)"
+  (onDelete)="confirmarExclusao($event)">
+</app-transaction-list>
 
-  <div class="mb-4">
-    <p-button
-      label="Nova Transação"
-      icon="pi pi-plus"
-      (click)="abrirModalNovo()">
-    </p-button>
-  </div>
-
-  <p-table [value]="transacoes" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Descrição</th>
-        <th>Valor</th>
-        <th>Tipo</th>
-        <th>Ações</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-transacao>
-      <tr>
-        <td>{{ transacao.descricao }}</td>
-        
-        <td 
-          [ngClass]="{
-            'text-green-600': transacao.ehReceita, 
-            'text-red-600': !transacao.ehReceita
-          }">
-          {{ transacao.valor | currency: 'BRL' }}
-        </td>
-
-        <td>
-          <span [ngClass]="{
-            'text-green-600': transacao.ehReceita, 
-            'text-red-600': !transacao.ehReceita
-          }">
-            {{ transacao.ehReceita ? 'Receita' : 'Despesa' }}
-          </span>
-        </td>
-
-        <td>
-          <p-button 
-            icon="pi pi-pencil" 
-            styleClass="p-button-sm p-button-info mr-2"
-            (click)="abrirModalEditar(transacao)">
-          </p-button>
-          
-          <p-button 
-            icon="pi pi-trash" 
-            styleClass="p-button-sm p-button-danger"
-            (click)="confirmarExclusao(transacao)">
-          </p-button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="4">Nenhuma transação encontrada.</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-</p-card>
-
-
-<p-dialog 
-  header="{{ transacaoSelecionada.id ? 'Editar Transação' : 'Nova Transação' }}" 
-  [(visible)]="exibirModal" 
-  [modal]="true" 
-  [style]="{ width: '450px' }">
-  
-  <div class="flex flex-col gap-4 p-4">
-    <div class="flex flex-col gap-2">
-      <label for="descricao">Descrição</label>
-      <input 
-        pInputText 
-        id="descricao" 
-        [(ngModel)]="transacaoSelecionada.descricao" />
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <label for="valor">Valor</label>
-      <p-inputNumber 
-        inputId="valor" 
-        [(ngModel)]="transacaoSelecionada.valor"
-        mode="currency" 
-        currency="BRL" 
-        locale="pt-BR">
-      </p-inputNumber>
-    </div>
-
-    <div class="flex align-items-center gap-2">
-      <p-checkbox 
-        [(ngModel)]="transacaoSelecionada.ehReceita" 
-        [binary]="true" 
-        inputId="ehReceita">
-      </p-checkbox>
-      <label for="ehReceita">É uma receita? (Marque se for entrada de dinheiro)</label>
-    </div>
-  </div>
-
-  <ng-template pTemplate="footer">
-    <p-button 
-      label="Cancelar" 
-      icon="pi pi-times" 
-      styleClass="p-button-text"
-      (click)="exibirModal = false">
-    </p-button>
-
-    <p-button 
-      label="Salvar" 
-      icon="pi pi-check" 
-      (click)="salvar()">
-    </p-button>
-  </ng-template>
-</p-dialog>
+<app-transaction-form
+  [transacao]="transacaoSelecionada"
+  [(visible)]="exibirModal"
+  (onSave)="salvar($event)">
+</app-transaction-form>
