@@ -1,0 +1,64 @@
+<p-card header="Gerenciador de Transações" 
+  class="block w-full shadow-lg rounded-lg">
+
+  <div class="mb-4">
+    <p-button
+      label="Nova Transação"
+      icon="pi pi-plus"
+      (click)="novaTransacao()">
+      </p-button>
+  </div>
+
+  <p-table [value]="transacoes" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transacao>
+      <tr>
+        <td>{{ transacao.descricao }}</td>
+        
+        <td 
+          [ngClass]="{
+            'text-green-600': transacao.ehReceita, 
+            'text-red-600': !transacao.ehReceita
+          }">
+          {{ transacao.valor | currency: 'BRL' }}
+        </td>
+
+        <td>
+          <span [ngClass]="{
+            'text-green-600': transacao.ehReceita, 
+            'text-red-600': !transacao.ehReceita
+          }">
+            {{ transacao.ehReceita ? 'Receita' : 'Despesa' }}
+          </span>
+        </td>
+
+        <td>
+          <p-button 
+            icon="pi pi-pencil" 
+            styleClass="p-button-sm p-button-info mr-2"
+            (click)="editarTransacao(transacao)">
+          </p-button>
+          
+          <p-button 
+            icon="pi pi-trash" 
+            styleClass="p-button-sm p-button-danger"
+            (click)="excluirTransacao(transacao)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">Nenhuma transação encontrada.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</p-card>

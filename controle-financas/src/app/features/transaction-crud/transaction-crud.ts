@@ -1,54 +1,40 @@
 import { Component } from '@angular/core';
-import { Transacao } from '../../models/transacao.model'; // Nosso modelo
+import { Transacao } from '../../models/transacao.model';
 
-// Módulos do PrimeNG
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CheckboxModule } from 'primeng/checkbox';
-import { CardModule } from 'primeng/card';
+// Imports dos Serviços do PrimeNG
+import { ConfirmationService, MessageService } from 'primeng/api';
+
+// Imports dos COMPONENTES FILHOS
+import { TransactionFormComponent } from '../transaction-form/transaction-form';
+import { TransactionListComponent } from '../transaction-list/transaction-list';
+
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-
-// Módulos do Angular
-import { FormsModule } from '@angular/forms'; // Para [(ngModel)]
-import { CommonModule } from '@angular/common'; // Para *ngIf e Pipes (como 'currency')
-
-// Serviços do PrimeNG
-import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-transaction-crud',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    TableModule,
-    ButtonModule,
-    DialogModule,
-    InputTextModule,
-    InputNumberModule,
-    CheckboxModule,
-    CardModule,
+    TransactionListComponent,
+    TransactionFormComponent,
     ConfirmDialogModule,
     ToastModule
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService], // Serviços ainda são providos aqui
   templateUrl: './transaction-crud.html',
   styleUrl: './transaction-crud.css'
 })
 export class TransactionCrudComponent {
 
-  transacoes: Transacao[] = []; // Onde guardamos a lista
-  transacaoSelecionada: Transacao = this.criarTransacaoLimpa(); // Objeto para o formulário
-  exibirModal: boolean = false; // Controla o modal (dialog)
+  transacoes: Transacao[] = []; 
+  transacaoSelecionada: Transacao | null = null;
+  exibirModal: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {
+    // Carregando os dados mocados (conforme solicitado)
     this.transacoes = [
       { id: 1, descricao: 'Salário', valor: 5000, ehReceita: true },
       { id: 2, descricao: 'Aluguel', valor: -1500, ehReceita: false },
@@ -56,30 +42,23 @@ export class TransactionCrudComponent {
     ];
   }
 
-  // --- Métodos de Ação ---
 
-  // (Detalhar / Incluir)
+  // (Evento vindo do ListComponent)
   abrirModalNovo() {
-    this.transacaoSelecionada = this.criarTransacaoLimpa();
+    this.transacaoSelecionada = null; // Limpa para indicar "novo"
     this.exibirModal = true;
   }
 
-  // (Alterar)
+  // (Evento vindo do ListComponent)
   abrirModalEditar(transacao: Transacao) {
-    // Usamos '...' (spread operator) para criar uma CÓPIA
-    // Se não fizermos isso, a tabela é alterada enquanto digitamos no modal
-    this.transacaoSelecionada = { ...transacao };
+    this.transacaoSelecionada = transacao; 
     this.exibirModal = true;
   }
 
-  // (Remover)
+  // (Evento vindo do ListComponent)
   confirmarExclusao(transacao: Transacao) {
     this.confirmationService.confirm({
       message: `Tem certeza que deseja excluir "${transacao.descricao}"?`,
-      header: 'Confirmar Exclusão',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim',
-      rejectLabel: 'Não',
       accept: () => {
         this.transacoes = this.transacoes.filter(t => t.id !== transacao.id);
         this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Transação excluída' });
@@ -87,31 +66,22 @@ export class TransactionCrudComponent {
     });
   }
 
-  // (Salvar - Incluir ou Alterar)
-  salvar() {
-    if (this.transacaoSelecionada.id) {
+  // (Evento vindo do FormComponent)
+  salvar(transacao: Transacao) {
+    if (transacao.id) {
       // --- Lógica de ALTERAR ---
-      const index = this.transacoes.findIndex(t => t.id === this.transacaoSelecionada.id);
+      const index = this.transacoes.findIndex(t => t.id === transacao.id);
       if (index !== -1) {
-        this.transacoes[index] = { ...this.transacaoSelecionada };
+        this.transacoes[index] = transacao;
         this.messageService.add({ severity: 'info', summary: 'Sucesso', detail: 'Transação atualizada' });
       }
     } else {
-      this.transacaoSelecionada.id = Date.now(); // Gambiarra para gerar um ID único
-      this.transacoes.push({ ...this.transacaoSelecionada });
+      // --- Lógica de INCLUIR ---
+      transacao.id = Date.now(); // Simula um ID
+      this.transacoes = [...this.transacoes, transacao]; // Adiciona à lista (forma imutável)
       this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Transação criada' });
     }
 
     this.exibirModal = false; // Fecha o modal
-    this.transacaoSelecionada = this.criarTransacaoLimpa(); // Limpa o objeto do formulário
-  }
-
-  // --- Métodos Auxiliares ---
-  private criarTransacaoLimpa(): Transacao {
-    return {
-      descricao: '',
-      valor: 0,
-      ehReceita: false 
-    };
   }
 }
