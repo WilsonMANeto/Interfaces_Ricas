@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { TransactionCrudComponent } from './features/transaction-crud/transaction-crud';
 import { HeaderComponent } from './layout/header/header';
 
@@ -7,7 +6,6 @@ import { HeaderComponent } from './layout/header/header';
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     HeaderComponent,
     TransactionCrudComponent 
   ],

@@ -35,14 +35,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     ConfirmDialogModule,
     ToastModule
   ],
-  // Precisamos "prover" os serviços que o PrimeNG usará
   providers: [ConfirmationService, MessageService],
   templateUrl: './transaction-crud.html',
   styleUrl: './transaction-crud.css'
 })
 export class TransactionCrudComponent {
 
-  // --- Estados do Componente ---
   transacoes: Transacao[] = []; // Onde guardamos a lista
   transacaoSelecionada: Transacao = this.criarTransacaoLimpa(); // Objeto para o formulário
   exibirModal: boolean = false; // Controla o modal (dialog)
@@ -51,7 +49,6 @@ export class TransactionCrudComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {
-    // Apenas para teste (vamos carregar dados mocados)
     this.transacoes = [
       { id: 1, descricao: 'Salário', valor: 5000, ehReceita: true },
       { id: 2, descricao: 'Aluguel', valor: -1500, ehReceita: false },
@@ -84,7 +81,6 @@ export class TransactionCrudComponent {
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
       accept: () => {
-        // Lógica de exclusão
         this.transacoes = this.transacoes.filter(t => t.id !== transacao.id);
         this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Transação excluída' });
       }
@@ -101,7 +97,6 @@ export class TransactionCrudComponent {
         this.messageService.add({ severity: 'info', summary: 'Sucesso', detail: 'Transação atualizada' });
       }
     } else {
-      // --- Lógica de INCLUIR ---
       this.transacaoSelecionada.id = Date.now(); // Gambiarra para gerar um ID único
       this.transacoes.push({ ...this.transacaoSelecionada });
       this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Transação criada' });
@@ -116,7 +111,7 @@ export class TransactionCrudComponent {
     return {
       descricao: '',
       valor: 0,
-      ehReceita: false // Padrão é ser uma despesa
+      ehReceita: false 
     };
   }
 }
