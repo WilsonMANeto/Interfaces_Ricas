@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { TransactionCrudComponent } from './features/transaction-crud/transaction-crud';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layout/header/header';
 
 @Component({
@@ -7,11 +7,11 @@ import { HeaderComponent } from './layout/header/header';
   standalone: true,
   imports: [
     HeaderComponent,
-    TransactionCrudComponent 
+    RouterOutlet
   ],
-  templateUrl: './app.html', 
+  templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App { 
-  protected readonly title = signal('contole-financas');
+export class App {
+  protected readonly title = signal('controle-financas');
 }

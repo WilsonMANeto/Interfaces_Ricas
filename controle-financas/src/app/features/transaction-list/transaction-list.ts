@@ -4,7 +4,7 @@ import { Transacao } from '../../models/transacao.model';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { CommonModule } from '@angular/common'; // Para pipes e ngClass
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-transaction-list',
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common'; // Para pipes e ngClass
   styleUrl: './transaction-list.css'
 })
 export class TransactionListComponent {
+
   @Input() transacoes: Transacao[] = [];
 
   @Output() onNew = new EventEmitter<void>();

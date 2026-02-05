@@ -1,13 +1,14 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Transacao } from '../../models/transacao.model';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+import { Transacao } from '../../models/transacao.model';
 
 @Component({
   selector: 'app-transaction-form',
@@ -15,7 +16,6 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     FormsModule,
-    DialogModule,
     ButtonModule,
     InputTextModule,
     InputNumberModule,
@@ -25,31 +25,71 @@ import { CommonModule } from '@angular/common';
   styleUrl: './transaction-form.css'
 })
 export class TransactionFormComponent {
-  // 1. DADOS QUE VÊM DO PAI:
-  @Input() transacao: Transacao | null = null;
-  @Input() visible: boolean = false;
 
-  // 2. EVENTOS QUE VÃO PARA O PAI:
-  @Output() onSave = new EventEmitter<Transacao>();
-  @Output() visibleChange = new EventEmitter<boolean>(); // Para fechar o modal
+  transacaoId?: number;
+  modo: 'novo' | 'detalhe' | 'edicao' = 'novo';
 
-  // 3. Estado interno para o formulário
   transacaoForm: Transacao = this.criarTransacaoLimpa();
 
-  ngOnChanges() {
-    if (this.transacao) {
-      this.transacaoForm = { ...this.transacao }; // Copia os dados
-    } else {
-      this.transacaoForm = this.criarTransacaoLimpa(); // Limpa
-    }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      // ======================
+      // NOVA TRANSAÇÃO
+      // ======================
+      if (!id || id === 'new') {
+        this.modo = 'novo';
+        this.transacaoForm = this.criarTransacaoLimpa();
+        return;
+      }
+
+      // ======================
+      // DETALHE / EDIÇÃO
+      // ======================
+      this.transacaoId = Number(id);
+
+      if (this.router.url.endsWith('edit')) {
+        this.modo = 'edicao';
+      } else {
+        this.modo = 'detalhe';
+      }
+
+      // Simulação de busca (dados em memória)
+      this.carregarTransacao(this.transacaoId);
+    });
   }
 
-  salvar() {
-    this.onSave.emit(this.transacaoForm);
+  // ======================
+  // AÇÕES
+  // ======================
+
+  salvar(): void {
+    console.log('Salvar transação:', this.transacaoForm);
+
+    // Aqui futuramente entra o service
+    this.router.navigate(['/transactions']);
   }
 
-  cancelar() {
-    this.visibleChange.emit(false); // Emite evento para o pai fechar
+  voltar(): void {
+    this.router.navigate(['/transactions']);
+  }
+
+  // ======================
+  // MÉTODOS AUXILIARES
+  // ======================
+
+  private carregarTransacao(id: number): void {
+    // Simulação de dados vindos de serviço
+    this.transacaoForm = {
+      id,
+      descricao: 'Exemplo carregado',
+      valor: 100,
+      ehReceita: true
+    };
   }
 
   private criarTransacaoLimpa(): Transacao {
