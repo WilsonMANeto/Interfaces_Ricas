@@ -3,13 +3,7 @@
 
 <app-transaction-list
   [transacoes]="transacoes"
-  (onNew)="abrirModalNovo()"
-  (onEdit)="abrirModalEditar($event)"
+  (onNew)="novaTransacao()"
+  (onEdit)="editarTransacao($event)"
   (onDelete)="confirmarExclusao($event)">
 </app-transaction-list>
-
-<app-transaction-form
-  [transacao]="transacaoSelecionada"
-  [(visible)]="exibirModal"
-  (onSave)="salvar($event)">
-</app-transaction-form>

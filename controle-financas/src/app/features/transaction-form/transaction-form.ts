@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Transacao } from '../../models/transacao.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+import { Transacao } from '../../models/transacao.model';
 
 @Component({
   selector: 'app-transaction-form',
@@ -37,36 +38,55 @@ export class TransactionFormComponent {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
 
-      if (!id) {
+      // ======================
+      // NOVA TRANSAÇÃO
+      // ======================
+      if (!id || id === 'new') {
         this.modo = 'novo';
         this.transacaoForm = this.criarTransacaoLimpa();
-      } else {
-        this.transacaoId = Number(id);
-
-        if (this.router.url.endsWith('edit')) {
-          this.modo = 'edicao';
-        } else {
-          this.modo = 'detalhe';
-        }
-
-        // Simulação de busca (dados em memória)
-        this.carregarTransacao(this.transacaoId);
+        return;
       }
+
+      // ======================
+      // DETALHE / EDIÇÃO
+      // ======================
+      this.transacaoId = Number(id);
+
+      if (this.router.url.endsWith('edit')) {
+        this.modo = 'edicao';
+      } else {
+        this.modo = 'detalhe';
+      }
+
+      // Simulação de busca (dados em memória)
+      this.carregarTransacao(this.transacaoId);
     });
   }
 
-  salvar() {
+  // ======================
+  // AÇÕES
+  // ======================
+
+  salvar(): void {
     console.log('Salvar transação:', this.transacaoForm);
+
+    // Aqui futuramente entra o service
     this.router.navigate(['/transactions']);
   }
 
-  voltar() {
+  voltar(): void {
     this.router.navigate(['/transactions']);
   }
 
-  private carregarTransacao(id: number) {
+  // ======================
+  // MÉTODOS AUXILIARES
+  // ======================
+
+  private carregarTransacao(id: number): void {
+    // Simulação de dados vindos de serviço
     this.transacaoForm = {
-      descricao: 'Exemplo',
+      id,
+      descricao: 'Exemplo carregado',
       valor: 100,
       ehReceita: true
     };

@@ -8,8 +8,9 @@
 
   <div class="flex flex-col gap-4">
 
+    <!-- DESCRIÇÃO -->
     <div class="flex flex-col gap-2">
-      <label for="descricao" class="text-gray-700">Descrição</label>
+      <label for="descricao">Descrição</label>
       <input
         pInputText
         id="descricao"
@@ -17,8 +18,9 @@
         [disabled]="modo === 'detalhe'" />
     </div>
 
+    <!-- VALOR -->
     <div class="flex flex-col gap-2">
-      <label for="valor" class="text-gray-700">Valor</label>
+      <label for="valor">Valor</label>
       <p-inputNumber
         inputId="valor"
         [(ngModel)]="transacaoForm.valor"
@@ -29,6 +31,7 @@
       </p-inputNumber>
     </div>
 
+    <!-- TIPO -->
     <div class="flex align-items-center gap-2">
       <p-checkbox
         [(ngModel)]="transacaoForm.ehReceita"
@@ -36,9 +39,7 @@
         inputId="ehReceita"
         [disabled]="modo === 'detalhe'">
       </p-checkbox>
-      <label for="ehReceita" class="text-gray-600">
-        É uma receita?
-      </label>
+      <label for="ehReceita">É uma receita?</label>
     </div>
 
   </div>

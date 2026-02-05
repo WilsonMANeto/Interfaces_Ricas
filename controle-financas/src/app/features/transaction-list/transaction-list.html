@@ -1,70 +1,70 @@
-<p-card header="Gerenciador de Transações"
-  class="block w-full shadow-lg rounded-lg">
+<p-card header="Transações" class="shadow-2">
 
-  <div class="mb-4">
-    <p-button
+  <!-- BOTÃO NOVA TRANSAÇÃO -->
+  <div class="flex justify-content-end mb-3">
+    <button
+      pButton
       label="Nova Transação"
       icon="pi pi-plus"
+      class="p-button-sm"
       (click)="novaTransacao()">
-    </p-button>
+    </button>
   </div>
 
-  <p-table [value]="transacoes" [tableStyle]="{ 'min-width': '50rem' }">
+  <!-- TABELA -->
+  <p-table
+    [value]="transacoes"
+    responsiveLayout="scroll">
 
     <ng-template pTemplate="header">
       <tr>
         <th>Descrição</th>
         <th>Valor</th>
-        <th>Tipo</th>
-        <th>Ações</th>
+        <th style="width: 120px">Ações</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-transacao>
+    <ng-template pTemplate="body" let-t>
       <tr>
-        <td>{{ transacao.descricao }}</td>
+        <td>{{ t.descricao }}</td>
 
         <td
           [ngClass]="{
-            'text-green-600': transacao.ehReceita,
-            'text-red-600': !transacao.ehReceita
+            'text-green-600': t.ehReceita,
+            'text-red-600': !t.ehReceita
           }">
-          {{ transacao.valor | currency:'BRL' }}
+          {{ t.valor | currency:'BRL' }}
         </td>
 
-        <td>
-          <span
-            [ngClass]="{
-              'text-green-600': transacao.ehReceita,
-              'text-red-600': !transacao.ehReceita
-            }">
-            {{ transacao.ehReceita ? 'Receita' : 'Despesa' }}
-          </span>
-        </td>
-
-        <td>
-          <!-- EDIÇÃO -->
-          <p-button
+        <td class="flex gap-2">
+          <!-- EDITAR -->
+          <button
+            pButton
             icon="pi pi-pencil"
-            styleClass="p-button-sm p-button-info mr-2"
-            (click)="editarTransacao(transacao)">
-          </p-button>
+            class="p-button-text p-button-sm"
+            (click)="editarTransacao(t)">
+          </button>
 
-          <!-- EXCLUSÃO -->
-          <p-button
+          <!-- EXCLUIR -->
+          <button
+            pButton
             icon="pi pi-trash"
-            styleClass="p-button-sm p-button-danger"
-            (click)="excluirTransacao(transacao)">
-          </p-button>
+            class="p-button-text p-button-danger p-button-sm"
+            (click)="excluirTransacao(t)">
+          </button>
         </td>
       </tr>
     </ng-template>
 
+    <!-- LISTA VAZIA -->
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="4">Nenhuma transação encontrada.</td>
+        <td colspan="3" class="text-center text-gray-500">
+          Nenhuma transação cadastrada.
+        </td>
       </tr>
     </ng-template>
 
   </p-table>
+
 </p-card>

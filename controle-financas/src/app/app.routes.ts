@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { TransactionListComponent } from './features/transaction-list/transaction-list';
+import { TransactionCrudComponent } from './features/transaction-crud/transaction-crud';
 import { TransactionFormComponent } from './features/transaction-form/transaction-form';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'transactions', pathMatch: 'full' },
 
   // LISTAGEM
-  { path: 'transactions', component: TransactionListComponent },
+  { path: 'transactions', component: TransactionCrudComponent },
 
-  // INCLUSÃO
+  // INCLUSÃO 
   { path: 'transactions/new', component: TransactionFormComponent },
 
-  // DETALHE
-  { path: 'transactions/:id', component: TransactionFormComponent },
-
-  // ATUALIZAÇÃO
+  // EDIÇÃO
   { path: 'transactions/:id/edit', component: TransactionFormComponent },
+
+  // DETALHE 
+  { path: 'transactions/:id', component: TransactionFormComponent },
 ];

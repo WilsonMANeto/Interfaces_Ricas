@@ -17,7 +17,6 @@ export class TransactionListComponent {
 
   @Input() transacoes: Transacao[] = [];
 
-  // 🔹 EVENTOS PARA O COMPONENTE PAI
   @Output() onNew = new EventEmitter<void>();
   @Output() onEdit = new EventEmitter<Transacao>();
   @Output() onDelete = new EventEmitter<Transacao>();
